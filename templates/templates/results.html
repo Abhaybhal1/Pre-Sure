@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Assessment Results - Pregnancy Risk Predictor</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar-brand {
+            font-weight: bold;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+        }
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+        }
+        .progress {
+            height: 20px;
+            border-radius: 10px;
+        }
+        .alert {
+            border-radius: 10px;
+        }
+        @media print {
+            .btn, .navbar, footer {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-baby me-2"></i>Pregnancy Risk Predictor
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-info-circle me-1"></i>Model Info
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="display-5 text-primary">
+                    <i class="fas fa-clipboard-check me-3"></i>Risk Assessment Results
+                </h1>
+                <p class="lead text-muted">AI-powered pregnancy risk analysis</p>
+            </div>
+        </div>
+
+        <!-- Main Results Card -->
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card shadow-lg">
+                    <div class="card-header text-white" id="result-header">
+                        <h3 class="card-title mb-0 text-center">
+                            <i class="fas fa-check-circle me-2" id="result-icon"></i>
+                            <span id="risk-level">Low Risk</span>
+                        </h3>
+                        <p class="text-center mb-0">Confidence: <span id="confidence">87.3%</span></p>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert border-0" id="summary-alert">
+                            <h5 class="alert-heading">
+                                <i class="fas fa-info-circle me-2"></i>Assessment Summary
+                            </h5>
+                            <p class="mb-0" id="prediction-message">
+                                Based on the provided health parameters, the analysis indicates a low pregnancy risk. 
+                                The vital signs and health metrics fall within normal ranges.
+                            </p>
+                        </div>
+
+                        <!-- Probability Breakdown -->
+                        <div class="mt-4">
+                            <h5><i class="fas fa-chart-bar me-2"></i>Probability Breakdown</h5>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>Low Risk</span>
+                                <div class="progress" style="width: 200px;">
+                                    <div class="progress-bar bg-success" style="width: 87%">
+                                        87.3%
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>Medium Risk</span>
+                                <div class="progress" style="width: 200px;">
+                                    <div class="progress-bar bg-warning" style="width: 10%">
+                                        10.2%
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>High Risk</span>
+                                <div class="progress" style="width: 200px;">
+                                    <div class="progress-bar bg-danger" style="width: 3%">
+                                        2.5%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Input Summary -->
+                        <div class="mt-4">
+                            <h5><i class="fas fa-list me-2"></i>Your Input Data</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td><strong>Age:</strong></td>
+                                            <td><span id="age">28</span> years</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Systolic BP:</strong></td>
+                                            <td><span id="systolic">120</span> mmHg</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Diastolic BP:</strong></td>
+                                            <td><span id="diastolic">80</span> mmHg</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td><strong>Blood Sugar:</strong></td>
+                                            <td><span id="blood-sugar">95</span> mg/dL</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Body Temperature:</strong></td>
+                                            <td><span id="body-temp">98.6</span>°F</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Heart Rate:</strong></td>
+                                            <td><span id="heart-rate">72</span> bpm</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="row mt-4">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h4 class="mb-0">
+                            <i class="fas fa-lightbulb me-2"></i>Recommendations
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Important:</strong> These recommendations are for educational purposes only. 
+                            Always consult with your healthcare provider for personalized medical advice.
+                        </div>
+                        
+                        <ul class="list-group list-group-flush" id="recommendations-list">
+                            <li class="list-group-item border-0 ps-0">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Continue regular prenatal checkups as scheduled
+                            </li>
+                            <li class="list-group-item border-0 ps-0">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Maintain a balanced diet rich in folic acid and iron
+                            </li>
+                            <li class="list-group-item border-0 ps-0">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Continue moderate exercise as approved by your doctor
+                            </li>
+                            <li class="list-group-item border-0 ps-0">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Monitor blood pressure regularly at home
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Model Information -->
+        <div class="row mt-4">
+            <div class="col-lg-8 mx-auto">
+                <div class="card bg-light">
+                    <div class="card-body text-center">
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="fas fa-robot me-2"></i>
+                            Prediction made using: <span id="model-name">Random Forest</span> Algorithm
+                        </h6>
+                        <small class="text-muted">
+                            This assessment is based on machine learning analysis of medical parameters.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="row mt-4 mb-5">
+            <div class="col-12 text-center">
+                <a href="#" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-redo me-2"></i>New Assessment
+                </a>
+                <button onclick="window.print()" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-print me-2"></i>Print Results
+                </button>
+            </div>
+        </div>
+
+        <!-- Emergency Contact Info -->
+        <div class="row mt-4">
+            <div class="col-lg-8 mx-auto">
+                <div class="alert alert-warning">
+                    <h5 class="alert-heading">
+                        <i class="fas fa-phone-alt me-2"></i>Emergency Contact
+                    </h5>
+                    <p class="mb-0">
+                        If you experience any severe symptoms such as severe headache, vision changes, 
+                        severe abdominal pain, bleeding, or decreased fetal movement, contact your healthcare 
+                        provider immediately or call emergency services.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container text-center">
+            <p class="mb-0">
+                <i class="fas fa-heartbeat me-2"></i>
+                Pregnancy Risk Predictor &copy; 2024 | 
+                <strong>For Educational Purposes Only</strong>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to update the display based on risk level
+        function updateRiskDisplay(riskLevel, confidence, message, recommendations) {
+            const header = document.getElementById('result-header');
+            const icon = document.getElementById('result-icon');
+            const alert = document.getElementById('summary-alert');
+            
+            // Remove existing classes
+            header.classList.remove('bg-success', 'bg-warning', 'bg-danger');
+            alert.classList.remove('alert-success', 'alert-warning', 'alert-danger');
+            icon.classList.remove('fa-check-circle', 'fa-exclamation-triangle', 'fa-exclamation-circle');
+            
+            // Add appropriate classes based on risk level
+            if (riskLevel === 'Low Risk') {
+                header.classList.add('bg-success');
+                alert.classList.add('alert-success');
+                icon.classList.add('fa-check-circle');
+            } else if (riskLevel === 'Medium Risk') {
+                header.classList.add('bg-warning');
+                alert.classList.add('alert-warning');
+                icon.classList.add('fa-exclamation-triangle');
+            } else {
+                header.classList.add('bg-danger');
+                alert.classList.add('alert-danger');
+                icon.classList.add('fa-exclamation-circle');
+            }
+            
+            // Update content
+            document.getElementById('risk-level').textContent = riskLevel;
+            document.getElementById('confidence').textContent = confidence;
+            document.getElementById('prediction-message').textContent = message;
+        }
+
+        // Initialize with default values (you can call this function with actual data)
+        updateRiskDisplay('Low Risk', '87.3%', 
+            'Based on the provided health parameters, the analysis indicates a low pregnancy risk. The vital signs and health metrics fall within normal ranges.',
+            []
+        );
+    </script>
+</body>
+</html>
