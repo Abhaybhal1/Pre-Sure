@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pregnancy Risk Predictor</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-baby me-2"></i>Pregnancy Risk Predictor
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('index') }}">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('model_info') }}">
+                            <i class="fas fa-info-circle me-1"></i>Model Info
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>{{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Header Section -->
+        <div class="row mb-5">
+            <div class="col-md-12 text-center">
+                <div class="hero-section">
+                    <h1 class="display-4 text-primary mb-3">
+                        <i class="fas fa-heartbeat me-3"></i>Pregnancy Risk Assessment
+                    </h1>
+                    <p class="lead text-muted">
+                        Advanced AI-powered tool to assess pregnancy risk levels based on medical parameters
+                    </p>
+                    <div class="alert alert-info mt-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Disclaimer:</strong> This tool is for educational purposes only. 
+                        Always consult with healthcare professionals for medical decisions.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="row">
+            <!-- Input Form -->
+            <div class="col-lg-8 mx-auto">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-clipboard-list me-2"></i>Medical Information
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('predict') }}" id="pregnancyForm">
+                            <div class="row">
+                                <!-- Age -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="Age" class="form-label">
+                                        <i class="fas fa-calendar-alt me-1"></i>Age (years)
+                                    </label>
+                                    <input type="number" class="form-control" id="Age" name="Age" 
+                                           min="15" max="50" required 
+                                           placeholder="Enter age">
+                                    <div class="form-text">Normal range: 18-40 years</div>
+                                </div>
+
+                                <!-- Systolic Blood Pressure -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="SystolicBP" class="form-label">
+                                        <i class="fas fa-tachometer-alt me-1"></i>Systolic BP (mmHg)
+                                    </label>
+                                    <input type="number" class="form-control" id="SystolicBP" name="SystolicBP" 
+                                           min="80" max="200" required 
+                                           placeholder="e.g., 120">
+                                    <div class="form-text">Normal: &lt;120 mmHg</div>
+                                </div>
+
+                                <!-- Diastolic Blood Pressure -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="DiastolicBP" class="form-label">
+                                        <i class="fas fa-tachometer-alt me-1"></i>Diastolic BP (mmHg)
+                                    </label>
+                                    <input type="number" class="form-control" id="DiastolicBP" name="DiastolicBP" 
+                                           min="50" max="120" required 
+                                           placeholder="e.g., 80">
+                                    <div class="form-text">Normal: &lt;80 mmHg</div>
+                                </div>
+
+                                <!-- Blood Sugar -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="BS" class="form-label">
+                                        <i class="fas fa-vial me-1"></i>Blood Sugar (mg/dL)
+                                    </label>
+                                    <input type="number" class="form-control" id="BS" name="BS" 
+                                           min="50" max="300" step="0.1" required 
+                                           placeholder="e.g., 95.5">
+                                    <div class="form-text">Normal fasting: 70-100 mg/dL</div>
+                                </div>
+
+                                <!-- Body Temperature -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="BodyTemp" class="form-label">
+                                        <i class="fas fa-thermometer-half me-1"></i>Body Temperature (°F)
+                                    </label>
+                                    <input type="number" class="form-control" id="BodyTemp" name="BodyTemp" 
+                                           min="95" max="105" step="0.1" required 
+                                           placeholder="e.g., 98.6">
+                                    <div class="form-text">Normal: 97.8-99.1°F</div>
+                                </div>
+
+                                <!-- Heart Rate -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="HeartRate" class="form-label">
+                                        <i class="fas fa-heartbeat me-1"></i>Heart Rate (bpm)
+                                    </label>
+                                    <input type="number" class="form-control" id="HeartRate" name="HeartRate" 
+                                           min="50" max="150" required 
+                                           placeholder="e.g., 75">
+                                    <div class="form-text">Normal: 60-100 bpm</div>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg px-5" id="predictBtn">
+                                    <i class="fas fa-brain me-2"></i>Assess Risk Level
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Information Cards -->
+        <div class="row mt-5">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-success">
+                    <div class="card-body text-center">
+                        <div class="text-success mb-3">
+                            <i class="fas fa-check-circle fa-3x"></i>
+                        </div>
+                        <h5 class="card-title text-success">Low Risk</h5>
+                        <p class="card-text">Normal pregnancy progression with standard prenatal care recommended.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-warning">
+                    <div class="card-body text-center">
+                        <div class="text-warning mb-3">
+                            <i class="fas fa-exclamation-triangle fa-3x"></i>
+                        </div>
+                        <h5 class="card-title text-warning">Medium Risk</h5>
+                        <p class="card-text">Requires closer monitoring and more frequent checkups.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-danger">
+                    <div class="card-body text-center">
+                        <div class="text-danger mb-3">
+                            <i class="fas fa-exclamation-circle fa-3x"></i>
+                        </div>
+                        <h5 class="card-title text-danger">High Risk</h5>
+                        <p class="card-text">Requires immediate medical attention and specialized care.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h4 class="mb-0">
+                            <i class="fas fa-star me-2"></i>Key Features
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i class="fas fa-robot text-primary me-2"></i>
+                                        AI-powered risk assessment
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-chart-line text-success me-2"></i>
+                                        Real-time prediction results
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-shield-alt text-info me-2"></i>
+                                        Secure and private
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i class="fas fa-user-md text-warning me-2"></i>
+                                        Based on medical research
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-mobile-alt text-secondary me-2"></i>
+                                        Mobile-friendly interface
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-clock text-danger me-2"></i>
+                                        Instant results
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light mt-5 py-4">
+        <div class="container text-center">
+            <p class="mb-0">
+                <i class="fas fa-heartbeat me-2"></i>
+                Pregnancy Risk Predictor &copy; 2024 | 
+                <strong>For Educational Purposes Only</strong>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
